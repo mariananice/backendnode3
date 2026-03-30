@@ -32,6 +32,7 @@ export default class UserController {
     }
 
     async login(req, res, next) {
+        console.log('BODY LOGIN:', req.body);
         try {
             const { GMIN, password } = req.body;
 
@@ -45,15 +46,15 @@ export default class UserController {
             next(error);
         }
 
-        const token = jwt.sign(
-            {
-                id_usuario: usuario.id_usuario,
-                rol: user.rol,
-                GMIN: user.GMIN
-            },
-            process.env.JWT_SECRET,
-            { expiresIn: '1h' }
-        );
+        //const token = jwt.sign(
+            //{
+                //id_usuario: usuario.id_usuario,
+                //rol: user.rol,
+                //GMIN: user.GMIN
+            //},
+            //process.env.JWT_SECRET,
+            //{ expiresIn: '1h' }
+        //);
     }
 
     async approveUser(req, res, next) {
