@@ -11,7 +11,7 @@ export default class UserRepository {
 
     async findById(id) {
         const [rows] = await db.query(
-            'SELECT * FROM usuarios WHERE id_usuarios = ?',
+            'SELECT * FROM usuarios WHERE id_usuario = ?',
             [id]
         );
         return rows[0];
@@ -59,7 +59,7 @@ export default class UserRepository {
 
     async delete(id) {
         await db.query(
-            'DELETE FROM usuarios WHERE id_usuarios = ?',
+            'DELETE FROM usuarios WHERE id_usuario = ?',
             [id]
         );
     }
@@ -129,4 +129,11 @@ export default class UserRepository {
         );
         return rows;
     }*/
+
+    async getAll() {
+        const [rows] = await db.query(
+            'SELECT id_usuario, GMIN, nombre_usuario AS nombre, email, rol FROM usuarios'
+        );
+        return rows;
+    }
 }

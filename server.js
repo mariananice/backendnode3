@@ -3,6 +3,7 @@ import cors from 'cors'
 import dotenv from 'dotenv'
 import path from 'path'
 import { fileURLToPath } from 'url'
+import helmet from 'helmet';
 
 import router from './src/routes/index.js'
 import errorMiddleware from './src/middlewares/errorMiddleware.js'
@@ -14,10 +15,11 @@ const app = express();
 const _filename = fileURLToPath(import.meta.url);
 const _dirname = path.dirname(_filename);
 
+app.use(helmet());
 app.use(express.json());
 app.use(cors());
 
-app.use(express.static(path.join(_dirname, './login.html')));
+app.use(express.static(path.join(_dirname, '..', 'FRONTENDNODE')));
 
 app.use('/api', router);
 app.use(errorMiddleware);

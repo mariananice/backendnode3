@@ -8,6 +8,7 @@ export default class UserController {
     }
 
     async create(req, res, next) {
+        console.log('BODY CREATE:', req.body);
         try {
             console.log(req.body);
 
@@ -82,6 +83,16 @@ export default class UserController {
             const { id } = req.params;
             await this.userService.delete(id);
             res.json({ message: 'Usuario eliminado correctamente' });
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async getAll(req, res, next) {
+        console.log('GET ALL USERS');
+        try {
+            const users = await this.userService.getAll();
+            res.json(users);
         } catch (error) {
             next(error);
         }

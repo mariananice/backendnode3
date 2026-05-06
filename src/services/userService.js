@@ -64,7 +64,7 @@ export default class UserService {
         const data = {};
 
         if (nombre) data.nombre_usuario = nombre;
-        if (email) data.emeail = email;
+        if (email) data.email = email;
         if (rol) data.rol = rol;
         if (password) {
             data.password_hash = await bcrypt.hash(password, 10);
@@ -80,6 +80,10 @@ export default class UserService {
         }
 
         await this.userRepository.delete(id);
+    }
+
+    async getAll() {
+        return await this.userRepository.getAll();
     }
 
     async forgotPassword(email) {
@@ -148,27 +152,42 @@ export default class UserService {
     }
 }
 
-/*
-async create({ GMIN, nombre, email, password, rol }) {
-    const exists = await this.userRepository.findByGMIN(GMIN);
-    if (exists) {
-        throw { status: 409, message: 'El usuario ya existe' };
+/*// userController.js
+import jwt from 'jsonwebtoken';
+
+async login(req, res, next) {
+    console.log('BODY LOGIN:', req.body);
+    try {
+        const { GMIN, password } = req.body;
+
+        if (!GMIN || !password) {
+            return res.status(400).json({ message: 'Datos incompletos' });
+        }
+
+        const user = await this.userService.login(GMIN, password); // que devuelva el usuario válido
+
+        // Generar token
+        const token = jwt.sign(
+            {
+                id_usuario: user.id_usuario,
+                rol: user.rol,
+                GMIN: user.GMIN
+            },
+            process.env.JWT_SECRET,
+            { expiresIn: '1h' }
+        );
+
+        res.json({
+            message: 'Login exitoso',
+            token,
+            user: {
+                id_usuario: user.id_usuario,
+                nombre: user.nombre,
+                rol: user.rol,
+                GMIN: user.GMIN
+            }
+        });
+    } catch (error) {
+        next(error);
     }
-
-    const passwordHash = await bcrypt.hash(password, 10);
-
-    const newUser = await this.userRepository.create({
-        GMIN,
-        nombre,
-        email,
-        passwordHash,
-        rol: rol || 'usuario'
-    });
-
-    // Notificar admin
-    await notifyAdminNewUser(process.env.ADMIN_EMAIL, newUser);
-
-    return {
-        message: 'Usuario registrado. Pendiente de aprobación por el administrador'
-    };
-}*/
+} */

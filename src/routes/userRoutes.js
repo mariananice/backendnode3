@@ -14,7 +14,7 @@ router.post("/login", userController.login.bind(userController));
 router.put('/:id', verifyToken, canEditUser, userController.update.bind(userController));
 router.delete('/:id', verifyToken, isAdmin, userController.delete.bind(userController));
 
-//router.get('/', verifyToken, isAdmin, userController.getAll.bind(userController));
+router.get('/', verifyToken, isAdmin, userController.getAll.bind(userController));
 
 router.post('/forgot-password', userController.forgotPassword.bind(userController));
 router.post('/reset-password', userController.resetPassword.bind(userController));
