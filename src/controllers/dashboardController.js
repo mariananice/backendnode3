@@ -1,36 +1,109 @@
-/*import DashboardService from "../services/dashboardService"
+/*import db from '../config/db.js'
 
-export default class DashboardController {
-    constructor() {
-        this.service = new DashboardService();
-    }
+export const obtenerDashboard = (req, res) => {
+    const query = `
+        SELECT
+        SUM(cantidad) AS produccion_total
+        FROM produccion
+        WHERE fecha = CURDATE()
+    `;
 
-    async getDashboard(req, res, next) {
-        try {
-            const data = await this.service.getDashboardData(req.user);
-            res.json(data);
-        } catch (error) {
-            next(error)
-        }
-    }
-}*/
+    db.query(query, (err, total) => {
 
-/*export default class DashboardController {
-    async getDashboard(req, res, next) {
-        try {
+        const plan = `
+            SELECT SUM(cantidad_planeada) AS planeado
+            FROM planeacion
+            WHERE fecha = CURDATE()
+        `;
+
+        db.query(plan, (err, planeado) => {
             res.json({
-                user: {
-                    nombre: req.user.nombre,
-                    rol: req.user.rol
-                },
-                status: {
-                    totalUsuarios: 0,
-                    usuariosPendientes: 0,
-                    notificaciones: []
-                }
+                produccion: total[0].produccion_total,
+                planeado: planeado[0].planeado
+            });
+        });
+
+    });
+};*/
+
+import fs from 'fs'
+import DashboardService from '../services/dashboardService.js'
+
+/*export const obtenerDashboard = (req, res) => {
+  res.json({ message: 'Dashboard OK' });
+};
+*/
+
+class DashboardController {
+    constructor () {
+        this.DashboardService = new DashboardService();
+    }
+
+    uploadExcel(req, res) {
+        try {
+            if (!req.file) {
+                return res.status(400).json({
+                    message: 'No se recibió ningún archivo'
+                });
+            }
+
+            const datos = this.DashboardService.leerExcel(req.file.path);
+
+            // opcional: borrar archivo temporal
+            if (fs.existsSync(req.file.path)) {
+                fs.unlinkSync(req.file.path);
+            }
+
+            return res.status(200).json({
+                message: 'Excel leído correctamente',
+                datos
             });
         } catch (error) {
-            next(error);
+            console.error('Error al procesar Excel:', error);
+            return res.status(500).json({
+                message: 'Error al procesar el Excel'
+            });
         }
     }
-}*/
+}
+
+export default DashboardController
+
+/*import fs from 'fs';
+import DashboardService from '../services/dashboardService.js';
+
+class DashboardController {
+  constructor() {
+    this.dashboardService = new DashboardService();
+  }
+
+  uploadExcel(req, res) {
+    try {
+      if (!req.file) {
+        return res.status(400).json({
+          message: 'No se recibió ningún archivo'
+        });
+      }
+
+      const datos = this.dashboardService.leerExcel(req.file.path);
+
+      // opcional: borrar archivo temporal
+      if (fs.existsSync(req.file.path)) {
+        fs.unlinkSync(req.file.path);
+      }
+
+      return res.status(200).json({
+        message: 'Excel leído correctamente',
+        datos
+      });
+    } catch (error) {
+      console.error('Error al procesar Excel:', error);
+      return res.status(500).json({
+        message: 'Error al procesar el Excel'
+      });
+    }
+  }
+}
+
+export default DashboardController;
+ */

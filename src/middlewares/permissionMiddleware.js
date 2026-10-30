@@ -20,7 +20,7 @@ export const canEditUser = (req, res, next) => {
     return res.status(403).json({
         message: 'No tienes permiso para editar este usuario',
     });
-};
+}
 
 /*export const canEditUser = (req, res, next) => {
     //if (!req.user) {

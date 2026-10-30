@@ -1,6 +1,13 @@
 import { Router } from 'express'
 import userRoutes from './userRoutes.js'
-//import dashboardRoutes from './dashboardRoutes.js'
+import cspcRoutes from './cspcRoutes.js'
+import dashboardRoutes from './dashboardRoutes.js'
+import parteRoutes from './parteRoutes.js'
+import planeacionRoutes from './planeacionRoutes.js'
+import produccionRoutes from './produccionRoutes.js'
+import programacionRoutes from './programacionRoutes.js'
+import reqbodyRoutes from './reqbodyRoutes.js'
+import importRoutes from './importRoutes.js'
 
 const router = Router();
 
@@ -16,6 +23,13 @@ router.get('/', (req, res) => {
 });
 
 router.use('/usuarios', userRoutes);
-//router.use('/dashboard', dashboardRoutes);
+router.use('/cspc', cspcRoutes);
+router.use('/dashboard', dashboardRoutes);
+router.use('/partes', parteRoutes);
+router.use('/planeacion', planeacionRoutes);
+router.use('/produccion', produccionRoutes);
+router.use('/programacion', programacionRoutes);
+router.use('/reqbody', reqbodyRoutes);
+router.use('/import', importRoutes);
 
-export default router;
+export default router

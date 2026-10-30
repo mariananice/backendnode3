@@ -29,3 +29,13 @@ export default class DashboardService {
         };
     }
 }*/
+
+import { parseExcel } from '../utils/excelParser.js'
+
+class DashboardService {
+    leerExcel(filePath) {
+        return parseExcel(filePath);
+    }
+}
+
+export default DashboardService
